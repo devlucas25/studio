@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import Logo from "@/components/logo";
 import { ArrowRight } from "lucide-react";
 
-export default function LoginPage() {
+export default function HomePage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4">
       <Card className="w-full max-w-md shadow-2xl">
@@ -26,13 +26,13 @@ export default function LoginPage() {
         </CardHeader>
         <CardContent className="grid gap-4">
           <Button asChild size="lg" className="w-full">
-            <Link href="/interviewer/dashboard">
+            <Link href="/login/interviewer">
               Entrar como Entrevistador
               <ArrowRight />
             </Link>
           </Button>
           <Button asChild variant="outline" size="lg" className="w-full">
-            <Link href="/admin/dashboard">
+            <Link href="/login/admin">
               Entrar como Administrador
               <ArrowRight />
             </Link>
