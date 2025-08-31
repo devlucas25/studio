@@ -1,6 +1,6 @@
 {
   "name": "London Polling Platform",
-  "short_name": "LondonPoll",
+  "short_name": "London",
   "description": "A robust solution for collecting and analyzing election data for London Pesquisas.",
   "start_url": "/",
   "display": "standalone",
