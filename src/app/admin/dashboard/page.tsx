@@ -9,8 +9,9 @@ import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContaine
 import Link from "next/link";
 import { generateExecutiveSummary } from "@/ai/flows/generate-executive-summary";
 import { suggestImprovements } from "@/ai/flows/suggest-improvements";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Textarea } from "@/components/ui/textarea";
+import { Tooltip as UITooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+
 
 const kpiData = [
   { title: "Pesquisas Ativas", value: "12", icon: FileText, change: "+2" },
@@ -31,10 +32,10 @@ const approvalData = [
 ];
 
 const interviewersData = [
-  { name: "João Silva", interviews: 125, avgTime: "12 min", validation: "98%" },
-  { name: "Maria Oliveira", interviews: 110, avgTime: "14 min", validation: "95%" },
-  { name: "Carlos Pereira", interviews: 98, avgTime: "11 min", validation: "99%" },
-  { name: "Ana Costa", interviews: 95, avgTime: "15 min", validation: "92%" },
+  { name: "João Silva", interviews: 125, avgTime: "12 min", validation: "98" },
+  { name: "Maria Oliveira", interviews: 110, avgTime: "14 min", validation: "95" },
+  { name: "Carlos Pereira", interviews: 98, avgTime: "11 min", validation: "99" },
+  { name: "Ana Costa", interviews: 95, avgTime: "15 min", validation: "92" },
 ];
 
 
@@ -159,29 +160,45 @@ export default function AdminDashboardPage() {
               <CardDescription>Gere resumos e sugestões com base nos dados atuais.</CardDescription>
             </div>
             <div className="flex gap-2">
-              <Button onClick={handleGenerateSummary} disabled={isSummaryLoading || isImprovementsLoading}>
-                {isSummaryLoading ? <Loader2 className="animate-spin" /> : <BrainCircuit />}
-                <span>Gerar Resumo</span>
-              </Button>
-               <Button onClick={handleSuggestImprovements} disabled={isSummaryLoading || isImprovementsLoading} variant="secondary">
-                {isImprovementsLoading ? <Loader2 className="animate-spin" /> : <BrainCircuit />}
-                <span>Sugerir Melhorias</span>
-              </Button>
+            <TooltipProvider>
+                <UITooltip>
+                  <TooltipTrigger asChild>
+                    <Button onClick={handleGenerateSummary} disabled={isSummaryLoading || isImprovementsLoading} variant="outline" size="icon">
+                      {isSummaryLoading ? <Loader2 className="animate-spin" /> : <BrainCircuit />}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Gerar Resumo Executivo</p>
+                  </TooltipContent>
+                </UITooltip>
+                 <UITooltip>
+                  <TooltipTrigger asChild>
+                    <Button onClick={handleSuggestImprovements} disabled={isSummaryLoading || isImprovementsLoading} variant="outline" size="icon">
+                       {isImprovementsLoading ? <Loader2 className="animate-spin" /> : <BrainCircuit />}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Sugerir Melhorias</p>
+                  </TooltipContent>
+                </UITooltip>
+              </TooltipProvider>
             </div>
           </div>
         </CardHeader>
+        {(isSummaryLoading || isImprovementsLoading || executiveSummary || suggestedImprovements) && (
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <h3 className="font-semibold mb-2">Resumo Executivo</h3>
-            {isSummaryLoading && <p className="text-sm text-muted-foreground">Analisando dados e gerando resumo...</p>}
-            {executiveSummary && <Textarea readOnly value={executiveSummary} className="h-32 bg-muted" />}
+            {isSummaryLoading && <p className="text-sm text-muted-foreground flex items-center gap-2"><Loader2 className="animate-spin h-4 w-4"/>Analisando dados e gerando resumo...</p>}
+            {executiveSummary && <Textarea readOnly value={executiveSummary} className="h-32 bg-muted text-sm" />}
           </div>
           <div>
              <h3 className="font-semibold mb-2">Sugestões de Melhoria</h3>
-            {isImprovementsLoading && <p className="text-sm text-muted-foreground">Analisando dados e gerando sugestões...</p>}
-            {suggestedImprovements && <Textarea readOnly value={suggestedImprovements} className="h-32 bg-muted" />}
+            {isImprovementsLoading && <p className="text-sm text-muted-foreground flex items-center gap-2"><Loader2 className="animate-spin h-4 w-4"/>Analisando dados e gerando sugestões...</p>}
+            {suggestedImprovements && <Textarea readOnly value={suggestedImprovements} className="h-32 bg-muted text-sm" />}
           </div>
         </CardContent>
+        )}
       </Card>
 
 
@@ -197,7 +214,7 @@ export default function AdminDashboardPage() {
                 <TableHead>Nome</TableHead>
                 <TableHead>Entrevistas</TableHead>
                 <TableHead>Tempo Médio</TableHead>
-                <TableHead>Validação GPS</TableHead>
+                <TableHead>Validação GPS (%)</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -206,7 +223,7 @@ export default function AdminDashboardPage() {
                   <TableCell className="font-medium">{interviewer.name}</TableCell>
                   <TableCell>{interviewer.interviews}</TableCell>
                   <TableCell>{interviewer.avgTime}</TableCell>
-                  <TableCell className={interviewer.validation.replace('%','') < '95' ? 'text-destructive' : 'text-accent'}>{interviewer.validation}</TableCell>
+                  <TableCell className={interviewer.validation < 95 ? 'text-destructive' : 'text-accent'}>{interviewer.validation}%</TableCell>
                 </TableRow>
               ))}
             </TableBody>
