@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import {
   Card,
@@ -14,10 +15,10 @@ import { Separator } from "@/components/ui/separator";
 
 export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-4">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-muted/40 p-4">
       <Card className="w-full max-w-md shadow-2xl">
         <CardHeader className="items-center text-center">
-          <Logo className="h-16 w-16 mb-4" />
+          <Logo className="h-16 w-16 mb-4 text-primary" />
           <CardTitle className="font-headline text-3xl">
             London Polling Platform
           </CardTitle>
