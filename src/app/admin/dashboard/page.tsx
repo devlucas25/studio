@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Users, FileText, Activity, ArrowUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import Link from "next/link";
 
 const kpiData = [
   { title: "Pesquisas Ativas", value: "12", icon: FileText, change: "+2" },
@@ -37,7 +38,9 @@ export default function AdminDashboardPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <h1 className="font-headline text-3xl font-semibold">Dashboard</h1>
-        <Button>Criar Pesquisa</Button>
+        <Button asChild>
+          <Link href="/admin/surveys/create">Criar Pesquisa</Link>
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">

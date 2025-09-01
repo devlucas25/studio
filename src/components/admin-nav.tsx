@@ -45,7 +45,7 @@ export default function AdminNav() {
                   pathname.startsWith(item.href) && "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
                 )}
               >
-                <Link href="#">
+                <Link href={item.href}>
                   <item.icon className="h-4 w-4" />
                   <span>{item.label}</span>
                 </Link>
