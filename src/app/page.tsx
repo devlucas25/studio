@@ -9,7 +9,8 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/logo";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, TestTube } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 export default function HomePage() {
   return (
@@ -38,8 +39,26 @@ export default function HomePage() {
             </Link>
           </Button>
         </CardContent>
-        <CardFooter className="justify-center">
-          <p className="text-sm text-muted-foreground">Modo de demonstração</p>
+        <CardFooter className="flex-col gap-4">
+           <div className="relative w-full">
+            <Separator />
+            <span className="absolute left-1/2 -translate-x-1/2 -top-3 bg-card px-2 text-xs text-muted-foreground">
+              ou
+            </span>
+          </div>
+          <p className="text-sm text-muted-foreground font-medium flex items-center gap-2"><TestTube className="h-4 w-4"/> Acesso Rápido (Modo Teste)</p>
+           <div className="grid grid-cols-2 gap-4 w-full">
+             <Button asChild variant="secondary" className="w-full">
+                <Link href="/interviewer/dashboard">
+                    Entrevistador
+                </Link>
+            </Button>
+             <Button asChild variant="secondary" className="w-full">
+                <Link href="/admin/dashboard">
+                    Administrador
+                </Link>
+            </Button>
+           </div>
         </CardFooter>
       </Card>
     </main>
