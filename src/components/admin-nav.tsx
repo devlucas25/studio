@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -10,16 +11,14 @@ import {
   SidebarFooter,
   SidebarContent,
 } from "@/components/ui/sidebar";
-import { LogOut, LayoutDashboard, FileText, Users, MessageSquare, Settings } from "lucide-react";
+import { LogOut, LayoutDashboard, FileText, Users, Settings, LineChart } from "lucide-react";
 import Logo from "@/components/logo";
 import { cn } from "@/lib/utils";
 
 const menuItems = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/surveys", label: "Pesquisas", icon: FileText },
-  { href: "/admin/reports", label: "Relatórios", icon: FileText },
-  { href: "/admin/interviewers", label: "Entrevistadores", icon: Users },
-  { href: "/admin/messages", label: "Mensagens", icon: MessageSquare },
+  { href: "/admin/reports", label: "Relatórios", icon: LineChart },
 ];
 
 export default function AdminNav() {
@@ -77,3 +76,5 @@ export default function AdminNav() {
     </>
   );
 }
+
+    

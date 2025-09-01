@@ -1,11 +1,16 @@
 
 "use client";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Users, FileText, Activity, ArrowUp } from "lucide-react";
+import { Users, FileText, Activity, ArrowUp, Loader2, BrainCircuit } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import Link from "next/link";
+import { generateExecutiveSummary } from "@/ai/flows/generate-executive-summary";
+import { suggestImprovements } from "@/ai/flows/suggest-improvements";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { Textarea } from "@/components/ui/textarea";
 
 const kpiData = [
   { title: "Pesquisas Ativas", value: "12", icon: FileText, change: "+2" },
@@ -34,6 +39,43 @@ const interviewersData = [
 
 
 export default function AdminDashboardPage() {
+  const [executiveSummary, setExecutiveSummary] = useState('');
+  const [suggestedImprovements, setSuggestedImprovements] = useState('');
+  const [isSummaryLoading, setIsSummaryLoading] = useState(false);
+  const [isImprovementsLoading, setIsImprovementsLoading] = useState(false);
+
+  const handleGenerateSummary = async () => {
+    setIsSummaryLoading(true);
+    setExecutiveSummary('');
+    try {
+      const pollingData = JSON.stringify({ voteIntentionData, approvalData });
+      const result = await generateExecutiveSummary({ pollingData });
+      setExecutiveSummary(result.summary);
+    } catch (error) {
+      console.error(error);
+      setExecutiveSummary('Falha ao gerar o resumo.');
+    } finally {
+      setIsSummaryLoading(false);
+    }
+  };
+
+  const handleSuggestImprovements = async () => {
+    setIsImprovementsLoading(true);
+    setSuggestedImprovements('');
+    try {
+      const surveyData = JSON.stringify({ voteIntentionData, approvalData, interviewersData });
+      const campaignGoals = 'O objetivo é entender a intenção de voto para a eleição municipal e avaliar a gestão atual para orientar a campanha do Candidato A.';
+      const result = await suggestImprovements({ surveyData, campaignGoals });
+      setSuggestedImprovements(result.suggestedImprovements);
+    } catch (error) {
+      console.error(error);
+      setSuggestedImprovements('Falha ao gerar sugestões.');
+    } finally {
+      setIsImprovementsLoading(false);
+    }
+  };
+
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
@@ -109,6 +151,40 @@ export default function AdminDashboardPage() {
         </Card>
       </div>
 
+       <Card>
+        <CardHeader>
+          <div className="flex justify-between items-start">
+            <div>
+              <CardTitle>Análise Inteligente</CardTitle>
+              <CardDescription>Gere resumos e sugestões com base nos dados atuais.</CardDescription>
+            </div>
+            <div className="flex gap-2">
+              <Button onClick={handleGenerateSummary} disabled={isSummaryLoading || isImprovementsLoading}>
+                {isSummaryLoading ? <Loader2 className="animate-spin" /> : <BrainCircuit />}
+                <span>Gerar Resumo</span>
+              </Button>
+               <Button onClick={handleSuggestImprovements} disabled={isSummaryLoading || isImprovementsLoading} variant="secondary">
+                {isImprovementsLoading ? <Loader2 className="animate-spin" /> : <BrainCircuit />}
+                <span>Sugerir Melhorias</span>
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h3 className="font-semibold mb-2">Resumo Executivo</h3>
+            {isSummaryLoading && <p className="text-sm text-muted-foreground">Analisando dados e gerando resumo...</p>}
+            {executiveSummary && <Textarea readOnly value={executiveSummary} className="h-32 bg-muted" />}
+          </div>
+          <div>
+             <h3 className="font-semibold mb-2">Sugestões de Melhoria</h3>
+            {isImprovementsLoading && <p className="text-sm text-muted-foreground">Analisando dados e gerando sugestões...</p>}
+            {suggestedImprovements && <Textarea readOnly value={suggestedImprovements} className="h-32 bg-muted" />}
+          </div>
+        </CardContent>
+      </Card>
+
+
       <Card>
         <CardHeader>
           <CardTitle>Desempenho dos Entrevistadores</CardTitle>
@@ -140,3 +216,5 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
+
+    
