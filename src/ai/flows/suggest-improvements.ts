@@ -2,7 +2,6 @@
 /**
  * @fileOverview This file defines a Genkit flow that analyzes survey data and suggests improvements for future polling campaigns.
  *
- * @fileOverview This file defines a Genkit flow that analyzes survey data and suggests improvements for future polling campaigns.
  * - suggestImprovements - A function that takes survey data as input and returns suggestions for improvements.
  * - SuggestImprovementsInput - The input type for the suggestImprovements function.
  * - SuggestImprovementsOutput - The output type for the suggestImprovements function.
