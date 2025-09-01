@@ -1,3 +1,4 @@
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,18 +9,19 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Logo from "@/components/logo";
 import Link from "next/link";
 
+// TODO: Fetch this data from Supabase
 const surveys = [
     { name: "Eleições Municipais 2024 - Centro", location: "São Paulo, SP", completed: 40, total: 100, deadline: "3 dias" },
     { name: "Avaliação de Gestão - Zona Leste", location: "São Paulo, SP", completed: 78, total: 80, deadline: "5 dias" },
     { name: "Pesquisa de Opinião - Saúde", location: "Rio de Janeiro, RJ", completed: 12, total: 150, deadline: "10 dias" },
 ];
 
-export default function InterviewerDashboard() {
-    const pendingSyncCount = 5;
+const pendingSyncCount = 5;
 
+export default function InterviewerDashboard() {
     return (
-        <div className="flex flex-col min-h-screen bg-background">
-            <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background/80 px-4 backdrop-blur-sm">
+        <div className="flex flex-col min-h-screen bg-muted/40">
+            <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background/80 px-4 backdrop-blur-sm sm:px-6">
                 <Link href="/" className="flex items-center gap-2">
                     <Logo className="h-8 w-8 text-primary" />
                     <span className="font-headline text-lg font-semibold sr-only sm:not-sr-only">London</span>
@@ -32,7 +34,7 @@ export default function InterviewerDashboard() {
                     </Badge>
                     <Button variant="ghost" size="icon" className="relative">
                         <Bell className="h-5 w-5" />
-                        <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-primary" />
+                        <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-primary ring-2 ring-background" />
                     </Button>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -54,7 +56,10 @@ export default function InterviewerDashboard() {
                 </div>
             </header>
             <main className="flex-1 p-4 sm:p-6">
-                <h1 className="font-headline text-3xl font-semibold mb-6">Minhas Pesquisas</h1>
+                <div className="mb-6">
+                    <h1 className="font-headline text-2xl font-semibold">Minhas Pesquisas</h1>
+                    <p className="text-muted-foreground">Pesquisas atribuídas a você. Toque para iniciar.</p>
+                </div>
                 <div className="grid gap-6">
                     {surveys.map((survey, index) => (
                         <Card key={index} className="shadow-md hover:shadow-lg transition-shadow">
@@ -68,7 +73,7 @@ export default function InterviewerDashboard() {
                             <CardContent>
                                 <div className="flex items-center justify-between mb-2 text-sm text-muted-foreground">
                                     <span>Progresso</span>
-                                    <span>{survey.completed}/{survey.total}</span>
+                                    <span>{survey.completed} / {survey.total}</span>
                                 </div>
                                 <Progress value={(survey.completed / survey.total) * 100} />
                             </CardContent>
@@ -80,6 +85,14 @@ export default function InterviewerDashboard() {
                             </CardFooter>
                         </Card>
                     ))}
+                     {surveys.length === 0 && (
+                        <Card className="flex flex-col items-center justify-center p-8 text-center border-dashed">
+                             <CardHeader>
+                                <CardTitle>Nenhuma pesquisa atribuída</CardTitle>
+                                <CardDescription>Aguarde novas instruções do seu administrador.</CardDescription>
+                            </CardHeader>
+                        </Card>
+                    )}
                 </div>
             </main>
         </div>
