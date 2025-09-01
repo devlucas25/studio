@@ -106,4 +106,3 @@ export default function SurveyPage({ params }: { params: { id: string } }) {
     </div>
   );
 }
-
