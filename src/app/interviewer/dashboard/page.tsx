@@ -11,9 +11,9 @@ import Link from "next/link";
 
 // TODO: Fetch this data from Supabase
 const surveys = [
-    { name: "Eleições Municipais 2024 - Centro", location: "São Paulo, SP", completed: 40, total: 100, deadline: "3 dias" },
-    { name: "Avaliação de Gestão - Zona Leste", location: "São Paulo, SP", completed: 78, total: 80, deadline: "5 dias" },
-    { name: "Pesquisa de Opinião - Saúde", location: "Rio de Janeiro, RJ", completed: 12, total: 150, deadline: "10 dias" },
+    { id: "1", name: "Eleições Municipais 2024 - Centro", location: "São Paulo, SP", completed: 40, total: 100, deadline: "3 dias" },
+    { id: "2", name: "Avaliação de Gestão - Zona Leste", location: "São Paulo, SP", completed: 78, total: 80, deadline: "5 dias" },
+    { id: "3", name: "Pesquisa de Opinião - Saúde", location: "Rio de Janeiro, RJ", completed: 12, total: 150, deadline: "10 dias" },
 ];
 
 const pendingSyncCount = 5;
@@ -79,8 +79,8 @@ export default function InterviewerDashboard() {
                             </CardContent>
                             <CardFooter className="flex justify-between items-center">
                                 <span className="text-sm text-muted-foreground">Prazo: {survey.deadline}</span>
-                                <Button>
-                                    Iniciar Entrevista
+                                <Button asChild>
+                                    <Link href={`/interviewer/survey/${survey.id}`}>Iniciar Entrevista</Link>
                                 </Button>
                             </CardFooter>
                         </Card>
