@@ -22,7 +22,6 @@ import { Loader2, FileDown, BrainCircuit } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Textarea } from '@/components/ui/textarea';
 import { generateExecutiveSummary } from '@/ai/flows/generate-executive-summary';
-import { suggestImprovements } from '@/ai/flows/suggest-improvements';
 
 
 const voteIntentionData = [
