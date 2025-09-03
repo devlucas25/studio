@@ -1,15 +1,26 @@
 {
-  "name": "London Polling Platform",
+  "theme_color": "#0F4C81",
+  "background_color": "#F1F5F9",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "name": "London Polling",
   "short_name": "London",
   "description": "A robust solution for collecting and analyzing election data for London Pesquisas.",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#F0F4F7",
-  "theme_color": "#004E98",
   "icons": [
     {
       "src": "/icon-192x192.png",
       "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-384x384.png",
+      "sizes": "384x384",
       "type": "image/png"
     },
     {
