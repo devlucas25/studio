@@ -21,9 +21,9 @@ export interface Interviewer {
 }
 
 export interface SurveyQuestion {
-  id: string;
-  question: string;
-  type: 'single_choice' | 'multiple_choice' | 'text' | 'number' | 'rating';
+  id?: string; // Optional on creation, assigned by DB
+  text: string;
+  type: 'single_choice' | 'multiple_choice' | 'text' | 'number';
   options?: string[];
   required: boolean;
 }

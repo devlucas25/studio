@@ -8,9 +8,12 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Plus, Trash2, Save } from 'lucide-react';
+import { Plus, Trash2, Save, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
+import { createSurvey } from '@/lib/supabase/actions';
+import { useFormStatus } from 'react-dom';
+
 
 interface Question {
   id: string;
@@ -20,11 +23,20 @@ interface Question {
   required: boolean;
 }
 
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button type="submit" disabled={pending}>
+      <Save className="h-4 w-4 mr-2" />
+      {pending ? 'Salvando...' : 'Salvar Pesquisa'}
+    </Button>
+  );
+}
+
+
 export default function CreateSurveyPage() {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
 
   const addQuestion = () => {
@@ -71,63 +83,56 @@ export default function CreateSurveyPage() {
       updateQuestion(questionId, { options: newOptions });
     }
   };
+  
+  const handleFormAction = async (formData: FormData) => {
+    const title = formData.get('title') as string;
 
-  const saveSurvey = async () => {
-    if (!title.trim()) {
+     if (!title.trim()) {
       toast({
-        title: "Erro",
-        description: "Título da pesquisa é obrigatório",
+        title: "Erro de Validação",
+        description: "O título da pesquisa é obrigatório.",
         variant: "destructive"
       });
       return;
     }
-
+    
     if (questions.length === 0) {
       toast({
-        title: "Erro", 
-        description: "Adicione pelo menos uma pergunta",
+        title: "Erro de Validação",
+        description: "A pesquisa deve ter pelo menos uma pergunta.",
         variant: "destructive"
       });
       return;
     }
+    
+    formData.append('questions', JSON.stringify(questions.map(({id, ...rest}) => rest)));
 
-    setIsSaving(true);
     try {
-      // TODO: Save to Supabase
-      console.log('Saving survey:', { title, description, questions });
-      
+      await createSurvey(formData);
       toast({
         title: "Sucesso!",
-        description: "Pesquisa criada com sucesso"
+        description: "Pesquisa criada e salva no banco de dados.",
       });
-      
-      // Reset form
-      setTitle('');
-      setDescription('');
-      setQuestions([]);
     } catch (error) {
+      console.error(error);
       toast({
-        title: "Erro",
-        description: "Falha ao salvar pesquisa",
+        title: "Erro ao Salvar",
+        description: "Não foi possível salvar a pesquisa. Verifique o console para mais detalhes.",
         variant: "destructive"
       });
-    } finally {
-      setIsSaving(false);
     }
-  };
+  }
+
 
   return (
-    <div className="flex flex-col gap-6">
+    <form action={handleFormAction} className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <h1 className="font-headline text-3xl font-semibold">Criar Nova Pesquisa</h1>
         <div className="flex gap-2">
           <Button variant="outline" asChild>
-            <Link href="/admin/dashboard">Cancelar</Link>
+            <Link href="/admin/surveys">Cancelar</Link>
           </Button>
-          <Button onClick={saveSurvey} disabled={isSaving}>
-            <Save className="h-4 w-4 mr-2" />
-            {isSaving ? 'Salvando...' : 'Salvar Pesquisa'}
-          </Button>
+          <SubmitButton />
         </div>
       </div>
 
@@ -140,17 +145,16 @@ export default function CreateSurveyPage() {
             <Label htmlFor="title">Título da Pesquisa</Label>
             <Input
               id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              name="title"
               placeholder="Ex: Pesquisa Eleitoral Municipal 2024"
+              required
             />
           </div>
           <div>
             <Label htmlFor="description">Descrição</Label>
             <Textarea
               id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              name="description"
               placeholder="Descrição da pesquisa..."
             />
           </div>
@@ -161,7 +165,7 @@ export default function CreateSurveyPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>Perguntas</CardTitle>
-            <Button onClick={addQuestion}>
+            <Button type="button" onClick={addQuestion}>
               <Plus className="h-4 w-4 mr-2" />
               Adicionar Pergunta
             </Button>
@@ -173,6 +177,7 @@ export default function CreateSurveyPage() {
               <div className="flex items-center justify-between">
                 <h3 className="font-medium">Pergunta {index + 1}</h3>
                 <Button
+                  type="button"
                   variant="ghost"
                   size="sm"
                   onClick={() => removeQuestion(question.id)}
@@ -195,7 +200,7 @@ export default function CreateSurveyPage() {
                   <Label>Tipo de Pergunta</Label>
                   <Select
                     value={question.type}
-                    onValueChange={(value: any) => updateQuestion(question.id, { type: value })}
+                    onValueChange={(value: any) => updateQuestion(question.id, { type: value, options: value.includes('choice') ? [''] : undefined })}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -226,6 +231,7 @@ export default function CreateSurveyPage() {
                   <div className="flex items-center justify-between mb-2">
                     <Label>Opções de Resposta</Label>
                     <Button
+                      type="button"
                       variant="outline"
                       size="sm"
                       onClick={() => addOption(question.id)}
@@ -244,6 +250,7 @@ export default function CreateSurveyPage() {
                         />
                         {question.options!.length > 1 && (
                           <Button
+                            type="button"
                             variant="ghost"
                             size="sm"
                             onClick={() => removeOption(question.id, optionIndex)}
@@ -267,6 +274,6 @@ export default function CreateSurveyPage() {
           )}
         </CardContent>
       </Card>
-    </div>
+    </form>
   );
 }
