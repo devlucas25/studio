@@ -1,4 +1,3 @@
-
 import Link from 'next/link';
 import { headers } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
@@ -30,6 +29,8 @@ export default function AdminLoginPage({ searchParams }: { searchParams: { messa
     return redirect('/admin/dashboard');
   };
 
+  const message = searchParams?.message;
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4">
        <Card className="w-full max-w-md">
@@ -58,8 +59,8 @@ export default function AdminLoginPage({ searchParams }: { searchParams: { messa
               <Checkbox id="remember" />
               <Label htmlFor="remember" className="text-sm font-normal">Lembrar-me</Label>
             </div>
-            {searchParams?.message && (
-              <p className="text-sm font-medium text-destructive">{searchParams.message}</p>
+            {message && (
+              <p className="text-sm font-medium text-destructive">{message}</p>
             )}
             <Button formAction={signIn} className="w-full">
               Entrar

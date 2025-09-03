@@ -25,6 +25,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: {
+    allowedDevOrigins: ['*'],
+  },
+  output: 'standalone',
 };
 
 export default nextConfig;
