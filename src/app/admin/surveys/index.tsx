@@ -7,65 +7,77 @@ import { MoreHorizontal, PlusCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
-const candidates = [
+const surveys = [
   {
-    name: 'Candidato 1',
-    party: 'Partido A',
+    title: 'Eleições Municipais 2024 - 1º Turno',
     city: 'São Paulo',
+    progress: '75/100',
     status: 'active',
   },
   {
-    name: 'Candidato 2',
-    party: 'Partido B',
+    title: 'Avaliação de Gestão - Bairros da Zona Sul',
     city: 'Rio de Janeiro',
-    status: 'active',
+    progress: '100/100',
+    status: 'completed',
   },
   {
-    name: 'Candidato 3',
-    party: 'Partido C',
+    title: 'Pesquisa de Intenção de Voto - Curitiba',
+    city: 'Curitiba',
+    progress: '20/100',
+    status: 'active',
+  },
+   {
+    title: 'Pesquisa Eleitoral - Belo Horizonte',
     city: 'Belo Horizonte',
-    status: 'inactive',
+    progress: '0/100',
+    status: 'pending',
   },
 ];
 
-export default function CandidatesPage() {
+export default function SurveysPage() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h1 className="font-headline text-3xl font-semibold">Gerenciamento de Candidatos</h1>
+        <h1 className="font-headline text-3xl font-semibold">Gerenciamento de Pesquisas</h1>
         <Button asChild>
-          <Link href="/admin/candidates/create">
-            <PlusCircle />
-            Adicionar Novo Candidato
+          <Link href="/admin/surveys/create">
+            <PlusCircle className="mr-2 h-4 w-4" />
+            Criar Nova Pesquisa
           </Link>
         </Button>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Lista de Candidatos</CardTitle>
-          <CardDescription>Visualize e gerencie todos os seus candidatos.</CardDescription>
+          <CardTitle>Lista de Pesquisas</CardTitle>
+          <CardDescription>Visualize e gerencie todas as suas pesquisas ativas e concluídas.</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Nome do Candidato</TableHead>
-                <TableHead>Partido</TableHead>
-                <TableHead>Cidade</TableHead>
+                <TableHead>Título da Pesquisa</TableHead>
+                <TableHead>Cidade/Bairro</TableHead>
+                <TableHead>Progresso</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {candidates.map((candidate) => (
-                <TableRow key={candidate.name}>
-                  <TableCell className="font-medium">{candidate.name}</TableCell>
-                  <TableCell>{candidate.party}</TableCell>
-                  <TableCell>{candidate.city}</TableCell>
+              {surveys.map((survey) => (
+                <TableRow key={survey.title}>
+                  <TableCell className="font-medium">{survey.title}</TableCell>
+                  <TableCell>{survey.city}</TableCell>
+                  <TableCell>{survey.progress}</TableCell>
                   <TableCell>
-                    <Badge variant={candidate.status === 'active' ? 'default' : 'outline'}>
-                      {candidate.status === 'active' ? 'Ativo' : 'Inativo'}
+                    <Badge 
+                        variant={
+                            survey.status === 'active' ? 'default' 
+                            : survey.status === 'completed' ? 'outline'
+                            : 'secondary'
+                        }
+                    >
+                      {survey.status === 'active' ? 'Em Andamento' : survey.status === 'completed' ? 'Concluída' : 'Pendente'}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -77,14 +89,15 @@ export default function CandidatesPage() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Visualizar</DropdownMenuItem>
+                        <DropdownMenuItem>Monitorar</DropdownMenuItem>
                         <DropdownMenuItem>Editar</DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive">Excluir</DropdownMenuItem>
+                        <DropdownMenuItem>Ver Relatório</DropdownMenuItem>
+                        <DropdownMenuItem className="text-destructive">Arquivar</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
                 </TableRow>
-              ))}\
+              ))}
             </TableBody>
           </Table>
         </CardContent>

@@ -1,32 +1,55 @@
 {
-  "theme_color": "#0F4C81",
-  "background_color": "#F1F5F9",
+  "theme_color": "#1e40af",
+  "background_color": "#ffffff",
   "display": "standalone",
   "scope": "/",
   "start_url": "/",
-  "name": "London Polling",
-  "short_name": "London",
-  "description": "A robust solution for collecting and analyzing election data for London Pesquisas.",
+  "name": "London Pesquisas - Sistema Eleitoral",
+  "short_name": "London Pesquisas",
+  "description": "Sistema profissional de coleta e análise de dados eleitorais com operação offline",
+  "orientation": "portrait-primary",
+  "categories": ["productivity", "business", "government"],
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "screenshots": [
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Dashboard London Pesquisas"
+    }
+  ],
   "icons": [
     {
       "src": "/icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon-256x256.png",
-      "sizes": "256x256",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/icon-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard Entrevistador",
+      "short_name": "Entrevistador",
+      "description": "Acesso rápido ao dashboard do entrevistador",
+      "url": "/interviewer/dashboard",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Dashboard Administrador",
+      "short_name": "Admin",
+      "description": "Acesso rápido ao dashboard administrativo",
+      "url": "/admin/dashboard",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
     }
   ]
 }

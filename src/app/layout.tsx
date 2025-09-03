@@ -16,9 +16,34 @@ const fontHeadline = Space_Grotesk({
 
 
 export const metadata: Metadata = {
-  title: "London Polling Platform",
-  description: "A robust solution for collecting and analyzing election data for London Pesquisas.",
+  title: "London Pesquisas - Sistema Eleitoral",
+  description: "Sistema profissional de coleta e análise de dados eleitorais com operação offline",
   manifest: "/manifest.json",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover",
+  themeColor: "#1e40af",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "London Pesquisas"
+  },
+  icons: {
+    icon: [
+      { url: '/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512x512.png', sizes: '512x512', type: 'image/png' }
+    ],
+    apple: [
+      { url: '/icon-192x192.png', sizes: '192x192', type: 'image/png' }
+    ]
+  },
+  other: {
+    'mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'default',
+    'apple-mobile-web-app-title': 'London Pesquisas',
+    'application-name': 'London Pesquisas',
+    'msapplication-TileColor': '#1e40af',
+    'msapplication-config': '/browserconfig.xml'
+  }
 };
 
 export default function RootLayout({
@@ -27,7 +52,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="pt-BR" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

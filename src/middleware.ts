@@ -66,11 +66,47 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(loginUrl, request.url))
   }
 
+  if (session && pathname.startsWith('/login')) {
+    // Get user role and redirect to appropriate dashboard
+    const { data: userRole } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', session.user.id)
+      .single();
 
-  if (session && (pathname.startsWith('/login'))) {
-     return NextResponse.redirect(new URL('/admin/dashboard', request.url))
+    if (userRole) {
+      const dashboardPath = userRole.role === 'administrator'
+        ? '/admin/dashboard'
+        : '/interviewer/dashboard';
+      return NextResponse.redirect(new URL(dashboardPath, request.url))
+    }
   }
 
+  // Role-based access control for admin and interviewer routes
+  if (session) {
+    const { data: userRole } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', session.user.id)
+      .single();
+
+    if (userRole) {
+      // Prevent interviewers from accessing admin routes
+      if (pathname.startsWith('/admin') && userRole.role !== 'administrator') {
+        return NextResponse.redirect(new URL('/interviewer/dashboard', request.url))
+      }
+
+      // Prevent admins from accessing interviewer routes (optional, based on requirements)
+      if (pathname.startsWith('/interviewer') && userRole.role !== 'interviewer') {
+        return NextResponse.redirect(new URL('/admin/dashboard', request.url))
+      }
+    } else {
+      // If no role found, redirect to appropriate login or handle accordingly
+      if (pathname.startsWith('/admin') || pathname.startsWith('/interviewer')) {
+        return NextResponse.redirect(new URL('/login/admin', request.url))
+      }
+    }
+  }
 
   return response
 }
