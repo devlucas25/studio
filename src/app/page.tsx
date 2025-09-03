@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -19,7 +20,7 @@ import { usePWA } from "@/hooks/use-pwa";
 import { useEffect, useState } from "react";
 
 export default function HomePage() {
-  const { isInstallable, isInstalled, isOnline, installApp } = usePWA();
+  const { isInstallable, isInstalled, isOnline, installApp, canShare } = usePWA();
   const [showFeatures, setShowFeatures] = useState(false);
 
   useEffect(() => {
@@ -54,7 +55,6 @@ export default function HomePage() {
           </Button>
         </CardContent>
         
-        {/* PWA Install Button */}
         {isInstallable && (
           <CardContent className="pt-0">
             <Button onClick={installApp} variant="outline" className="w-full">
@@ -74,12 +74,12 @@ export default function HomePage() {
           <p className="text-sm text-muted-foreground font-medium flex items-center gap-2"><TestTube className="h-4 w-4"/> Acesso Rápido (Modo Teste)</p>
            <div className="grid grid-cols-2 gap-4 w-full">
              <Button asChild variant="secondary" className="w-full">
-                <Link href="/interviewer/dashboard">
+                <Link href="/interviewer/dashboard?mode=test">
                     Entrevistador
                 </Link>
             </Button>
              <Button asChild variant="secondary" className="w-full">
-                <Link href="/admin/dashboard">
+                <Link href="/admin/dashboard?mode=test">
                     Administrador
                 </Link>
             </Button>
@@ -87,7 +87,6 @@ export default function HomePage() {
         </CardFooter>
       </Card>
       
-      {/* Features Section */}
       {showFeatures && (
         <div className="w-full max-w-4xl mt-8 space-y-6">
           <div className="text-center">
@@ -137,7 +136,6 @@ export default function HomePage() {
             </Card>
           </div>
           
-          {/* Status Indicators */}
           <div className="flex justify-center gap-4 text-sm">
             <Badge variant={isOnline ? "secondary" : "destructive"}>
               {isOnline ? "Online" : "Offline"}
