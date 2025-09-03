@@ -19,6 +19,7 @@ export const metadata: Metadata = {
   title: "London Pesquisas - Sistema Eleitoral",
   description: "Sistema profissional de coleta e análise de dados eleitorais com operação offline",
   manifest: "/manifest.json",
+  applicationName: 'London Pesquisas',
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -34,11 +35,6 @@ export const metadata: Metadata = {
     ]
   },
   other: {
-    'mobile-web-app-capable': 'yes',
-    'apple-mobile-web-app-capable': 'yes',
-    'apple-mobile-web-app-status-bar-style': 'default',
-    'apple-mobile-web-app-title': 'London Pesquisas',
-    'application-name': 'London Pesquisas',
     'msapplication-TileColor': '#1e40af',
     'msapplication-config': '/browserconfig.xml'
   }
@@ -51,7 +47,7 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: "cover",
-}
+};
 
 export default function RootLayout({
   children,
