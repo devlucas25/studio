@@ -12,14 +12,14 @@ import { ChevronLeft, ChevronRight, Flag, PauseCircle, Save } from 'lucide-react
 import Link from 'next/link';
 
 // Mock data, to be replaced with data from Supabase
-const survey = {
-  title: 'Eleições Municipais 2024 - Centro',
+const feedbackSurvey = {
+  title: 'Pesquisa de Satisfação - Pós-venda',
   questions: [
-    { id: 'q1', text: 'Em qual candidato você pretende votar para prefeito?', type: 'multiple_choice', options: ['Candidato A', 'Candidato B', 'Candidato C', 'Nenhum/Branco/Nulo'] },
-    { id: 'q2', text: 'Você aprova a atual gestão da prefeitura?', type: 'multiple_choice', options: ['Aprovo', 'Rejeito', 'Não sei/Não opinou'] },
-    { id: 'q3', text: 'Qual o principal problema do seu bairro?', type: 'open_text' },
-    { id: 'q4', text: 'Qual sua faixa de idade?', type: 'multiple_choice', options: ['16-24', '25-34', '35-44', '45-59', '60+'] },
-    { id: 'q5', text: 'Qual seu gênero?', type: 'multiple_choice', options: ['Masculino', 'Feminino', 'Outro', 'Prefiro não dizer'] },
+    { id: 'q1', text: 'No geral, qual o seu nível de satisfação com o nosso produto/serviço?', type: 'multiple_choice', options: ['Muito Satisfeito', 'Satisfeito', 'Neutro', 'Insatisfeito', 'Muito Insatisfeito'] },
+    { id: 'q2', text: 'Qual a probabilidade de você recomendar nosso produto/serviço a um amigo ou colega?', type: 'multiple_choice', options: ['0 - Nada Provável', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10 - Muito Provável'] },
+    { id: 'q3', text: 'Quais aspectos do nosso produto/serviço você considera mais satisfatórios?', type: 'open_text' },
+    { id: 'q4', text: 'Quais aspectos você acha que poderíamos melhorar?', type: 'open_text' },
+    { id: 'q5', text: 'Você gostaria de deixar algum comentário adicional?', type: 'open_text' },
   ],
 };
 
@@ -27,11 +27,11 @@ export default function SurveyPage({ params }: { params: { id: string } }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
 
-  const currentQuestion = survey.questions[currentQuestionIndex];
-  const progress = ((currentQuestionIndex + 1) / survey.questions.length) * 100;
+  const currentQuestion = feedbackSurvey.questions[currentQuestionIndex];
+  const progress = ((currentQuestionIndex + 1) / feedbackSurvey.questions.length) * 100;
 
   const handleNext = () => {
-    if (currentQuestionIndex < survey.questions.length - 1) {
+    if (currentQuestionIndex < feedbackSurvey.questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
@@ -46,7 +46,7 @@ export default function SurveyPage({ params }: { params: { id: string } }) {
     setAnswers({ ...answers, [questionId]: value });
   };
   
-  const isLastQuestion = currentQuestionIndex === survey.questions.length - 1;
+  const isLastQuestion = currentQuestionIndex === feedbackSurvey.questions.length - 1;
 
   return (
     <div className="flex flex-col min-h-screen bg-muted/40 p-4 justify-center items-center">
@@ -54,7 +54,7 @@ export default function SurveyPage({ params }: { params: { id: string } }) {
             <CardHeader>
                 <Progress value={progress} className="mb-4" />
                 <CardTitle className="text-xl">{currentQuestion.text}</CardTitle>
-                <CardDescription>Pergunta {currentQuestionIndex + 1} de {survey.questions.length}</CardDescription>
+                <CardDescription>Pergunta {currentQuestionIndex + 1} de {feedbackSurvey.questions.length}</CardDescription>
             </CardHeader>
             <CardContent className="min-h-[250px] flex items-center">
                 {currentQuestion.type === 'multiple_choice' && (
@@ -88,7 +88,7 @@ export default function SurveyPage({ params }: { params: { id: string } }) {
                 {isLastQuestion ? (
                      <Button size="lg" className="bg-accent hover:bg-accent/90">
                         <Flag/>
-                        Finalizar Entrevista
+                        Finalizar Pesquisa
                     </Button>
                 ) : (
                     <Button onClick={handleNext}>

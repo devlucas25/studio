@@ -10,10 +10,10 @@ import Logo from "@/components/logo";
 import Link from "next/link";
 
 // TODO: Fetch this data from Supabase
-const surveys = [
-    { id: "1", name: "Eleições Municipais 2024 - Centro", location: "São Paulo, SP", completed: 40, total: 100, deadline: "3 dias" },
-    { id: "2", name: "Avaliação de Gestão - Zona Leste", location: "São Paulo, SP", completed: 78, total: 80, deadline: "5 dias" },
-    { id: "3", name: "Pesquisa de Opinião - Saúde", location: "Rio de Janeiro, RJ", completed: 12, total: 150, deadline: "10 dias" },
+const feedbackSurveys = [
+    { id: "1", name: "Feedback sobre Atendimento - Loja Centro", location: "São Paulo, SP", completed: 40, total: 100, deadline: "3 dias" },
+    { id: "2", name: "Avaliação de Produto X - Online", location: "Todo Brasil", completed: 78, total: 80, deadline: "5 dias" },
+    { id: "3", name: "Pesquisa de Satisfação - Pós-venda", location: "Rio de Janeiro, RJ", completed: 12, total: 150, deadline: "10 dias" },
 ];
 
 const pendingSyncCount = 5;
@@ -57,11 +57,11 @@ export default function InterviewerDashboard() {
             </header>
             <main className="flex-1 p-4 sm:p-6">
                 <div className="mb-6">
-                    <h1 className="font-headline text-2xl font-semibold">Minhas Pesquisas</h1>
-                    <p className="text-muted-foreground">Pesquisas atribuídas a você. Toque para iniciar.</p>
+                    <h1 className="font-headline text-2xl font-semibold">Minhas Pesquisas de Feedback</h1>
+                    <p className="text-muted-foreground">Pesquisas de feedback atribuídas a você. Toque para iniciar.</p>
                 </div>
                 <div className="grid gap-6">
-                    {surveys.map((survey, index) => (
+                    {feedbackSurveys.map((survey, index) => (
                         <Card key={index} className="shadow-md hover:shadow-lg transition-shadow">
                             <CardHeader>
                                 <CardTitle>{survey.name}</CardTitle>
@@ -80,15 +80,15 @@ export default function InterviewerDashboard() {
                             <CardFooter className="flex justify-between items-center">
                                 <span className="text-sm text-muted-foreground">Prazo: {survey.deadline}</span>
                                 <Button asChild>
-                                    <Link href={`/interviewer/survey/${survey.id}`}>Iniciar Entrevista</Link>
+                                    <Link href={`/interviewer/survey/${survey.id}`}>Iniciar Pesquisa</Link>
                                 </Button>
                             </CardFooter>
                         </Card>
                     ))}
-                     {surveys.length === 0 && (
+                     {feedbackSurveys.length === 0 && (
                         <Card className="flex flex-col items-center justify-center p-8 text-center border-dashed">
                              <CardHeader>
-                                <CardTitle>Nenhuma pesquisa atribuída</CardTitle>
+                                <CardTitle>Nenhuma pesquisa de feedback atribuída</CardTitle>
                                 <CardDescription>Aguarde novas instruções do seu administrador.</CardDescription>
                             </CardHeader>
                         </Card>

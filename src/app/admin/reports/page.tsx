@@ -23,22 +23,20 @@ import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContaine
 import { Textarea } from '@/components/ui/textarea';
 import { generateExecutiveSummary } from '@/ai/flows/generate-executive-summary';
 
-
-const voteIntentionData = [
-  { name: "Candidato A", votes: 45 },
-  { name: "Candidato B", votes: 32 },
-  { name: "Candidato C", votes: 15 },
-  { name: "Brancos/Nulos", votes: 8 },
+const npsData = [
+  { name: "Promotores", value: 65, color: 'hsl(var(--primary))' },
+  { name: "Neutros", value: 25, color: 'hsl(var(--muted-foreground))' },
+  { name: "Detratores", value: 10, color: 'hsl(var(--destructive))' },
 ];
 
-const approvalData = [
-    { name: 'Aprova', value: 65, color: 'hsl(var(--accent))' },
-    { name: 'Rejeita', value: 35, color: 'hsl(var(--destructive))' },
+const csatData = [
+    { name: 'Satisfeitos', value: 80, color: 'hsl(var(--primary))' },
+    { name: 'Insatisfeitos', value: 20, color: 'hsl(var(--destructive))' },
 ];
 
 
 export default function ReportsPage() {
-    const [reportType, setReportType] = useState('intention');
+    const [reportType, setReportType] = useState('nps');
     const [analysis, setAnalysis] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
@@ -46,7 +44,7 @@ export default function ReportsPage() {
         setIsLoading(true);
         setAnalysis('');
         try {
-            const reportData = JSON.stringify(reportType === 'intention' ? voteIntentionData : approvalData);
+            const reportData = JSON.stringify(reportType === 'nps' ? npsData : csatData);
             const result = await generateExecutiveSummary({ pollingData: reportData });
             setAnalysis(result.summary);
         } catch(error) {
@@ -61,18 +59,8 @@ export default function ReportsPage() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h1 className="font-headline text-3xl font-semibold">Relatórios Gerenciais</h1>
+        <h1 className="font-headline text-3xl font-semibold">Relatórios de Satisfação do Cliente</h1>
         <div className="flex items-center gap-2">
-            <Select defaultValue="eleicao_2024">
-                <SelectTrigger className="w-[280px]">
-                    <SelectValue placeholder="Selecione uma pesquisa" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="eleicao_2024">Eleições 2024 - Intenção de Voto</SelectItem>
-                    <SelectItem value="gestao_2024">Avaliação de Gestão Municipal</SelectItem>
-                    <SelectItem value="transporte_2023">Opinião - Transporte Público</SelectItem>
-                </SelectContent>
-            </Select>
             <Button variant="outline">
                 <FileDown/>
                 Exportar PDF
@@ -94,8 +82,8 @@ export default function ReportsPage() {
                         <SelectValue placeholder="Tipo de Relatório" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="intention">Relatório de Intenção de Voto</SelectItem>
-                        <SelectItem value="approval">Relatório de Avaliação de Gestão</SelectItem>
+                        <SelectItem value="nps">Net Promoter Score (NPS)</SelectItem>
+                        <SelectItem value="csat">Customer Satisfaction (CSAT)</SelectItem>
                     </SelectContent>
                 </Select>
                 
@@ -130,26 +118,30 @@ export default function ReportsPage() {
                 <Card className="min-h-[450px]">
                      <CardHeader>
                         <CardTitle>
-                            {reportType === 'intention' ? 'Gráfico de Intenção de Voto' : 'Gráfico de Avaliação de Gestão'}
+                            {reportType === 'nps' ? 'Gráfico de NPS' : 'Gráfico de CSAT'}
                         </CardTitle>
                      </CardHeader>
                      <CardContent>
-                        {reportType === 'intention' && (
+                        {reportType === 'nps' && (
                              <ResponsiveContainer width="100%" height={350}>
-                                <BarChart data={voteIntentionData}>
+                                <BarChart data={npsData}>
                                     <CartesianGrid strokeDasharray="3 3" vertical={false} />
                                     <XAxis dataKey="name" tick={{ fontSize: 12 }} />
                                     <YAxis unit="%" tick={{ fontSize: 12 }} />
                                     <Tooltip cursor={{ fill: 'hsl(var(--muted))' }} />
-                                    <Bar dataKey="votes" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                                    <Bar dataKey="value" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} >
+                                        {npsData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.color} />
+                                        ))}
+                                    </Bar>
                                 </BarChart>
                             </ResponsiveContainer>
                         )}
-                        {reportType === 'approval' && (
+                        {reportType === 'csat' && (
                              <ResponsiveContainer width="100%" height={350}>
                                 <PieChart>
                                     <Pie
-                                    data={approvalData}
+                                    data={csatData}
                                     cx="50%"
                                     cy="50%"
                                     labelLine={false}
@@ -158,7 +150,7 @@ export default function ReportsPage() {
                                     dataKey="value"
                                     label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                                     >
-                                    {approvalData.map((entry, index) => (
+                                    {csatData.map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={entry.color} />
                                     ))}
                                     </Pie>
