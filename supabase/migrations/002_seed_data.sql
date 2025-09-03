@@ -1,37 +1,40 @@
--- Insere dados de exemplo na tabela de pesquisas
--- para testar a funcionalidade de listagem.
+-- supabase/migrations/002_seed_data.sql
+
+-- Inserir dados de exemplo para pesquisas (surveys)
+-- Este script assume que o schema de 001_initial_schema.sql foi executado.
 
 INSERT INTO "surveys" (title, description, status, city, progress, questions)
 VALUES 
 (
-  'Pesquisa Eleitoral Municipal 2024', 
-  'Análise de intenção de voto para prefeito na cidade de São Paulo.', 
+  'Pesquisa Eleitoral 2024 - Prefeitura', 
+  'Análise de intenção de voto para o cargo de prefeito na cidade.', 
+  'active', 
+  'São Paulo, SP', 
+  '40/100',
+  '[
+    {"id": "q1", "question": "Em quem você votaria para prefeito hoje?", "type": "single_choice", "options": ["Candidato A", "Candidato B", "Candidato C", "Branco/Nulo", "Não sabe"], "required": true},
+    {"id": "q2", "question": "Qual é a sua avaliação do atual prefeito?", "type": "single_choice", "options": ["Péssima", "Ruim", "Regular", "Boa", "Ótima"], "required": true}
+  ]'::jsonb
+),
+(
+  'Avaliação do Governo Estadual',
+  'Pesquisa sobre a percepção da população em relação ao governo do estado.',
   'active',
   'São Paulo, SP',
-  '45/100',
+  '78/80',
   '[
-    {"id": "q1", "text": "Em quem você votaria para prefeito hoje?", "type": "single_choice", "options": ["Candidato A", "Candidato B", "Candidato C", "Branco/Nulo"], "required": true},
-    {"id": "q2", "text": "Qual sua avaliação da gestão atual?", "type": "single_choice", "options": ["Ótima", "Boa", "Regular", "Ruim", "Péssima"], "required": true}
+    {"id": "q1", "question": "Você aprova ou desaprova a atual gestão do governo estadual?", "type": "single_choice", "options": ["Aprovo", "Desaprovo", "Não sabe"], "required": true},
+    {"id": "q2", "question": "Qual área você considera a mais crítica atualmente?", "type": "single_choice", "options": ["Saúde", "Educação", "Segurança", "Economia"], "required": true}
   ]'::jsonb
 ),
 (
-  'Avaliação do Governo Estadual', 
-  'Pesquisa de aprovação do governo do estado em diversas áreas.', 
+  'Intenção de Voto - Vereadores',
+  'Levantamento sobre a intenção de voto para vereadores na região central.',
   'completed',
-  'Campinas, SP',
-  '200/200',
+  'São Paulo, SP - Centro',
+  '150/150',
   '[
-    {"id": "q1", "text": "Você aprova ou desaprova o atual governador?", "type": "single_choice", "options": ["Aprovo", "Desaprovo"], "required": true},
-    {"id": "q2", "text": "Qual a área mais crítica na sua opinião?", "type": "single_choice", "options": ["Saúde", "Educação", "Segurança"], "required": true}
-  ]'::jsonb
-),
-(
-  'Pesquisa Cenário Presidencial 2026', 
-  'Primeira pesquisa de intenção de voto para as eleições presidenciais de 2026.', 
-  'pending',
-  'Nacional',
-  '0/5000',
-  '[
-    {"id": "q1", "text": "Se a eleição fosse hoje, em quem você votaria para presidente?", "type": "single_choice", "options": ["Candidato X", "Candidato Y", "Candidato Z", "Nenhum"], "required": true}
+    {"id": "q1", "question": "Se a eleição para vereador fosse hoje, em qual candidato você votaria? (Resposta espontânea)", "type": "text", "required": true},
+    {"id": "q2", "question": "Quão interessado(a) você está nas eleições municipais deste ano?", "type": "rating", "options": ["1", "2", "3", "4", "5"], "required": true}
   ]'::jsonb
 );
