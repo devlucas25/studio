@@ -1,5 +1,5 @@
 // Database types for London Pesquisas electoral data system
-// Generated from supabase/migrations/001_initial_electoral_schema.sql
+// Generated from supabase/migrations/001_initial_schema.sql
 
 export interface UserRole {
   id: string;
@@ -28,12 +28,18 @@ export interface SurveyQuestion {
   required: boolean;
 }
 
+export type SurveyStatus = 'pending' | 'active' | 'completed' | 'archived';
+
+
 export interface Survey {
   id: string;
   title: string;
   description?: string;
   questions: SurveyQuestion[];
-  is_active: boolean;
+  is_active: boolean; // Legacy or can be used for quick toggles
+  status?: SurveyStatus;
+  city?: string;
+  progress?: string;
   created_by?: string;
   created_at: string;
   updated_at: string;
@@ -43,6 +49,8 @@ export interface InterviewAnswer {
   question_id: string;
   answer: string | number | string[];
 }
+
+export type InterviewStatus = 'draft' | 'completed' | 'submitted' | 'approved' | 'rejected';
 
 export interface Interview {
   id: string;
@@ -56,7 +64,7 @@ export interface Interview {
   longitude?: number;
   accuracy?: number;
   answers: InterviewAnswer[];
-  status: 'draft' | 'completed' | 'submitted' | 'approved' | 'rejected';
+  status: InterviewStatus;
   is_offline: boolean;
   offline_synced: boolean;
   created_at: string;
@@ -102,13 +110,21 @@ export const UserRoles = {
   ADMINISTRATOR: 'administrator',
 } as const;
 
-export const InterviewStatus = {
+export const InterviewStatuses = {
   DRAFT: 'draft',
   COMPLETED: 'completed',
   SUBMITTED: 'submitted',
   APPROVED: 'approved',
   REJECTED: 'rejected',
 } as const;
+
+export const SurveyStatuses = {
+  PENDING: 'pending',
+  ACTIVE: 'active',
+  COMPLETED: 'completed',
+  ARCHIVED: 'archived',
+} as const;
+
 
 export const ReportTypes = {
   SURVEY_SUMMARY: 'survey_summary',

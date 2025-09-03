@@ -1,7 +1,23 @@
+
 import { createClient } from './client'
 import type { Survey, Interview, Interviewer } from '@/types/database'
 
 const supabase = createClient()
+
+// Buscar todas as pesquisas
+export async function getAllSurveys() {
+  const { data, error } = await supabase
+    .from('surveys')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching surveys:', error);
+    throw error;
+  }
+  return data as Survey[];
+}
+
 
 // Buscar todas as pesquisas ativas
 export async function getSurveys() {
