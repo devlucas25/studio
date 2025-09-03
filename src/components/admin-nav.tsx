@@ -11,7 +11,7 @@ import {
   SidebarFooter,
   SidebarContent,
 } from "@/components/ui/sidebar";
-import { LogOut, LayoutDashboard, FileText, Users, Settings, LineChart } from "lucide-react";
+import { LogOut, LayoutDashboard, FileText, Settings, LineChart } from "lucide-react";
 import Logo from "@/components/logo";
 import { cn } from "@/lib/utils";
 
@@ -76,5 +76,3 @@ export default function AdminNav() {
     </>
   );
 }
-
-    

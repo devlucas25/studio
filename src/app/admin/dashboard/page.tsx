@@ -31,7 +31,7 @@ const voteIntentionData = [
 ];
 
 const approvalData = [
-    { name: 'Aprova', value: 65, color: 'hsl(var(--accent))' },
+    { name: 'Aprova', value: 65, color: 'hsl(var(--chart-2))' },
     { name: 'Rejeita', value: 35, color: 'hsl(var(--destructive))' },
 ];
 
@@ -208,7 +208,7 @@ export default function AdminDashboardPage() {
                 <XAxis dataKey="name" tick={{ fontSize: 10 }} />
                 <YAxis unit="%" tick={{ fontSize: 10 }} />
                 <Tooltip cursor={{ fill: 'hsl(var(--muted))' }} />
-                <Bar dataKey="votes" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="votes" fill="hsl(var(--chart-1))" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -254,8 +254,8 @@ export default function AdminDashboardPage() {
                 <XAxis dataKey="day" tick={{ fontSize: 10 }} />
                 <YAxis tick={{ fontSize: 10 }} />
                 <Tooltip />
-                <Line type="monotone" dataKey="completed" stroke="hsl(var(--primary))" strokeWidth={2} />
-                <Line type="monotone" dataKey="target" stroke="hsl(var(--muted-foreground))" strokeDasharray="5 5" />
+                <Line type="monotone" dataKey="completed" stroke="hsl(var(--chart-1))" strokeWidth={2} name="Realizado" />
+                <Line type="monotone" dataKey="target" stroke="hsl(var(--muted-foreground))" strokeDasharray="5 5" name="Meta"/>
               </LineChart>
             </ResponsiveContainer>
           </CardContent>

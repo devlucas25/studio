@@ -68,28 +68,28 @@ export default {
         // London Pesquisas brand colors
         london: {
           blue: {
-            50: '#eff6ff',
-            100: '#dbeafe',
-            200: '#bfdbfe',
-            300: '#93c5fd',
-            400: '#60a5fa',
-            500: '#3b82f6',
-            600: '#1e40af', // Primary brand blue
-            700: '#1d4ed8',
-            800: '#1e3a8a',
-            900: '#1e293b',
+            '50': '#eff6ff',
+            '100': '#dbeafe',
+            '200': '#bfdbfe',
+            '300': '#93c5fd',
+            '400': '#60a5fa',
+            '500': '#3b82f6',
+            '600': '#1e40af', // Primary brand blue
+            '700': '#1d4ed8',
+            '800': '#1e3a8a',
+            '900': '#1e293b',
           },
           green: {
-            50: '#f0fdf4',
-            100: '#dcfce7',
-            200: '#bbf7d0',
-            300: '#86efac',
-            400: '#4ade80',
-            500: '#22c55e',
-            600: '#10b981', // Success/approval green
-            700: '#059669',
-            800: '#047857',
-            900: '#064e3b',
+            '50': '#f0fdf4',
+            '100': '#dcfce7',
+            '200': '#bbf7d0',
+            '300': '#86efac',
+            '400': '#4ade80',
+            '500': '#22c55e',
+            '600': '#10b981', // Success/approval green
+            '700': '#059669',
+            '800': '#047857',
+            '900': '#064e3b',
           },
         },
       },

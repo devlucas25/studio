@@ -30,15 +30,15 @@ import { ReportGenerator } from '@/lib/report-generator';
 import { useToast } from '@/hooks/use-toast';
 
 const voteIntentionData = [
-  { name: "Candidato A", value: 45, color: '#1e40af' },
-  { name: "Candidato B", value: 32, color: '#3b82f6' },
-  { name: "Candidato C", value: 15, color: '#60a5fa' },
-  { name: "Branco/Nulo", value: 8, color: '#9ca3af' },
+  { name: "Candidato A", value: 45, color: 'hsl(var(--chart-1))' },
+  { name: "Candidato B", value: 32, color: 'hsl(var(--chart-2))' },
+  { name: "Candidato C", value: 15, color: 'hsl(var(--chart-3))' },
+  { name: "Branco/Nulo", value: 8, color: 'hsl(var(--chart-4))' },
 ];
 
 const approvalData = [
-    { name: 'Aprova', value: 65, color: '#10b981' },
-    { name: 'Rejeita', value: 35, color: '#ef4444' },
+    { name: 'Aprova', value: 65, color: 'hsl(var(--chart-2))' },
+    { name: 'Rejeita', value: 35, color: 'hsl(var(--destructive))' },
 ];
 
 const demographicData = [
@@ -61,14 +61,14 @@ const reportTemplates = [
     title: 'Relatório de Intenção de Voto',
     description: 'Análise completa da intenção de voto com segmentação demográfica',
     icon: BarChart3,
-    color: 'bg-blue-500'
+    color: 'bg-london-blue-600'
   },
   {
     id: 'management_approval',
     title: 'Relatório de Avaliação de Gestão',
     description: 'Aprovação e rejeição da gestão atual com análise por região',
     icon: PieChart,
-    color: 'bg-green-500'
+    color: 'bg-london-green-600'
   },
   {
     id: 'comparative',
@@ -426,9 +426,9 @@ export default function ReportsPage() {
                           <XAxis dataKey="age" />
                           <YAxis />
                           <Tooltip />
-                          <Bar dataKey="candidateA" fill="#1e40af" name="Candidato A" />
-                          <Bar dataKey="candidateB" fill="#3b82f6" name="Candidato B" />
-                          <Bar dataKey="candidateC" fill="#60a5fa" name="Candidato C" />
+                          <Bar dataKey="candidateA" fill="hsl(var(--chart-1))" name="Candidato A" />
+                          <Bar dataKey="candidateB" fill="hsl(var(--chart-2))" name="Candidato B" />
+                          <Bar dataKey="candidateC" fill="hsl(var(--chart-3))" name="Candidato C" />
                         </BarChart>
                       </ResponsiveContainer>
                     </CardContent>
@@ -448,8 +448,8 @@ export default function ReportsPage() {
                           <XAxis dataKey="week" />
                           <YAxis />
                           <Tooltip />
-                          <Line type="monotone" dataKey="completed" stroke="#10b981" strokeWidth={3} name="Realizado" />
-                          <Line type="monotone" dataKey="target" stroke="#6b7280" strokeDasharray="5 5" name="Meta" />
+                          <Line type="monotone" dataKey="completed" stroke="hsl(var(--chart-2))" strokeWidth={3} name="Realizado" />
+                          <Line type="monotone" dataKey="target" stroke="hsl(var(--muted-foreground))" strokeDasharray="5 5" name="Meta" />
                         </LineChart>
                       </ResponsiveContainer>
                     </CardContent>

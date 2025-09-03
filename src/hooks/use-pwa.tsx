@@ -20,6 +20,16 @@ export function usePWA() {
   const [canShare, setCanShare] = useState(false);
 
   useEffect(() => {
+    // Handle online/offline status
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    setIsOnline(navigator.onLine);
+    setCanShare(!!navigator.share);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
     // Check if app is already installed
     const checkInstalled = () => {
       if (window.matchMedia('(display-mode: standalone)').matches || 
@@ -42,20 +52,12 @@ export function usePWA() {
       setDeferredPrompt(null);
     };
 
-    // Handle online/offline status
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
     // Initial checks
     checkInstalled();
-    setIsOnline(navigator.onLine);
-    setCanShare(!!navigator.share);
 
     // Event listeners
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     window.addEventListener('appinstalled', handleAppInstalled);
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);

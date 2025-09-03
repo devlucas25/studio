@@ -10,7 +10,10 @@ export interface ReportData {
   data: any;
 }
 
-export interface VoteIntentionReport extends ReportData {
+export interface VoteIntentionReport {
+  title: string;
+  description: string;
+  generatedAt: string;
   candidates: Array<{
     name: string;
     percentage: number;
@@ -20,7 +23,10 @@ export interface VoteIntentionReport extends ReportData {
   marginOfError: number;
 }
 
-export interface ManagementApprovalReport extends ReportData {
+export interface ManagementApprovalReport {
+  title: string;
+  description: string;
+  generatedAt: string;
   approval: {
     approve: number;
     disapprove: number;
