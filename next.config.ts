@@ -23,7 +23,9 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
-    allowedDevOrigins: ['*'],
+    serverActions: {
+      allowedOrigins: ['6000-firebase-studio-1756682734751.cluster-lr6dwlc2lzbcctqhqorax5zmro.cloudworkstations.dev'],
+    },
   },
   output: 'standalone',
 };
