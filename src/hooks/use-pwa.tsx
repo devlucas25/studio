@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -16,6 +17,7 @@ export function usePWA() {
   const [isInstalled, setIsInstalled] = useState(false);
   const [isOnline, setIsOnline] = useState(true);
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [canShare, setCanShare] = useState(false);
 
   useEffect(() => {
     // Check if app is already installed
@@ -47,6 +49,7 @@ export function usePWA() {
     // Initial checks
     checkInstalled();
     setIsOnline(navigator.onLine);
+    setCanShare(!!navigator.share);
 
     // Event listeners
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -104,6 +107,6 @@ export function usePWA() {
     isOnline,
     installApp,
     shareApp,
-    canShare: !!navigator.share,
+    canShare,
   };
 }
