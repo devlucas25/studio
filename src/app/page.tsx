@@ -20,7 +20,7 @@ import { usePWA } from "@/hooks/use-pwa";
 import { useEffect, useState } from "react";
 
 export default function HomePage() {
-  const { isInstallable, isInstalled, isOnline, installApp, canShare } = usePWA();
+  const { isInstallable, isInstalled, isOnline, installApp } = usePWA();
   const [showFeatures, setShowFeatures] = useState(false);
 
   useEffect(() => {
@@ -28,6 +28,7 @@ export default function HomePage() {
     const timer = setTimeout(() => setShowFeatures(true), 500);
     return () => clearTimeout(timer);
   }, []);
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-muted/40 p-4">
       <Card className="w-full max-w-md shadow-2xl">
@@ -73,16 +74,16 @@ export default function HomePage() {
           </div>
           <p className="text-sm text-muted-foreground font-medium flex items-center gap-2"><TestTube className="h-4 w-4"/> Acesso Rápido (Modo Teste)</p>
            <div className="grid grid-cols-2 gap-4 w-full">
-             <Button asChild variant="secondary" className="w-full">
-                <Link href="/interviewer/dashboard?mode=test">
+             <form action="/interviewer/dashboard?mode=test" method="GET" className="w-full">
+                <Button variant="secondary" className="w-full" type="submit">
                     Entrevistador
-                </Link>
-            </Button>
-             <Button asChild variant="secondary" className="w-full">
-                <Link href="/admin/dashboard?mode=test">
+                </Button>
+             </form>
+             <form action="/admin/dashboard?mode=test" method="GET" className="w-full">
+                <Button variant="secondary" className="w-full" type="submit">
                     Administrador
-                </Link>
-            </Button>
+                </Button>
+             </form>
            </div>
         </CardFooter>
       </Card>
