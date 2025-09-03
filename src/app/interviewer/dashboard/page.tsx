@@ -1,4 +1,3 @@
-"use client";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,19 +11,12 @@ import Link from "next/link";
 import { ConnectionStatus } from "@/components/connection-status";
 import { OfflineMap } from "@/components/offline-map";
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
-import { usePWA } from "@/hooks/use-pwa";
-import { useEffect, useState } from "react";
-import { syncOfflineData } from "@/lib/offline-storage";
+import { getAllSurveys } from "@/lib/supabase/queries";
+import { Survey } from "@/types/database";
 
 
-
-const electoralSurveys = [
-    { id: "1", name: "Pesquisa Eleitoral 2024 - Prefeitura", location: "São Paulo, SP - Centro", completed: 40, total: 100, deadline: "3 dias", area: [-23.5505, -46.6333] as [number, number] },
-    { id: "2", name: "Avaliação Governo Estadual", location: "São Paulo, SP - Zona Sul", completed: 78, total: 80, deadline: "5 dias", area: [-23.6181, -46.6647] as [number, number] },
-    { id: "3", name: "Intenção de Voto - Vereador", location: "São Paulo, SP - Vila Madalena", completed: 12, total: 150, deadline: "10 dias", area: [-23.5368, -46.6918] as [number, number] },
-];
-
-export default function InterviewerDashboard() {
+const SyncManager = () => {
+    "use client";
     const { isInstallable, installApp, shareApp, canShare } = usePWA();
     const [isSyncing, setIsSyncing] = useState(false);
     const [lastSync, setLastSync] = useState<string | null>(null);
@@ -41,32 +33,15 @@ export default function InterviewerDashboard() {
             setIsSyncing(false);
         }
     };
+    
+    // Import PWA and Offline functionality only on client
+    const { usePWA } = require("@/hooks/use-pwa");
+    const { syncOfflineData } = require("@/lib/offline-storage");
+    const { useState } = require("react");
 
-    const handleInstallApp = async () => {
-        await installApp();
-    };
-
-    const handleShareApp = async () => {
-        await shareApp();
-    };
-
-    // Generate map markers from surveys
-    const mapMarkers = electoralSurveys.map(survey => ({
-        id: survey.id,
-        position: survey.area,
-        title: survey.name,
-        status: survey.completed === survey.total ? 'completed' as const : 
-                survey.completed > 0 ? 'in-progress' as const : 'pending' as const
-    }));
     return (
-        <div className="flex flex-col min-h-screen bg-muted/40">
-            <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background/80 px-4 backdrop-blur-sm sm:px-6">
-                <Link href="/" className="flex items-center gap-2">
-                    <Logo className="h-8 w-8 text-primary" />
-                    <span className="font-headline text-lg font-semibold sr-only sm:not-sr-only">London</span>
-                </Link>
-
-                <div className="flex items-center gap-4">
+        <>
+             <div className="flex items-center gap-4">
                     <ConnectionStatus />
                     
                     {isSyncing && (
@@ -105,13 +80,13 @@ export default function InterviewerDashboard() {
                                 {isSyncing ? 'Sincronizando...' : 'Sincronizar Dados'}
                             </DropdownMenuItem>
                             {isInstallable && (
-                                <DropdownMenuItem onClick={handleInstallApp}>
+                                <DropdownMenuItem onClick={installApp}>
                                     <Download className="mr-2 h-4 w-4" />
                                     Instalar App
                                 </DropdownMenuItem>
                             )}
                             {canShare && (
-                                <DropdownMenuItem onClick={handleShareApp}>
+                                <DropdownMenuItem onClick={shareApp}>
                                     <Share2 className="mr-2 h-4 w-4" />
                                     Compartilhar
                                 </DropdownMenuItem>
@@ -124,6 +99,38 @@ export default function InterviewerDashboard() {
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
+                {lastSync && (
+                    <div className="text-right text-sm text-muted-foreground mt-2">
+                        <p>Última sincronização:</p>
+                        <p className="font-medium">{lastSync}</p>
+                    </div>
+                )}
+        </>
+    )
+}
+
+
+export default async function InterviewerDashboard() {
+    const electoralSurveys: Survey[] = await getAllSurveys();
+
+    // Mock area for map, replace with actual survey data later
+    const mapMarkers = electoralSurveys.map(survey => ({
+        id: survey.id,
+        position: [-23.5505 + Math.random() * 0.1, -46.6333 + Math.random() * 0.1] as [number, number], // Mock location
+        title: survey.title,
+        status: survey.status === 'completed' ? 'completed' as const : 
+                survey.status === 'active' ? 'in-progress' as const : 'pending' as const
+    }));
+
+    return (
+        <div className="flex flex-col min-h-screen bg-muted/40">
+            <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background/80 px-4 backdrop-blur-sm sm:px-6">
+                <Link href="/" className="flex items-center gap-2">
+                    <Logo className="h-8 w-8 text-primary" />
+                    <span className="font-headline text-lg font-semibold sr-only sm:not-sr-only">London</span>
+                </Link>
+
+                <SyncManager />
             </header>
             <main className="flex-1 p-4 sm:p-6">
                 <div className="mb-6">
@@ -132,12 +139,6 @@ export default function InterviewerDashboard() {
                             <h1 className="font-headline text-2xl font-semibold">Minhas Pesquisas Eleitorais</h1>
                             <p className="text-muted-foreground">Pesquisas eleitorais atribuídas a você. Toque para iniciar coleta.</p>
                         </div>
-                        {lastSync && (
-                            <div className="text-right text-sm text-muted-foreground">
-                                <p>Última sincronização:</p>
-                                <p className="font-medium">{lastSync}</p>
-                            </div>
-                        )}
                     </div>
                 </div>
                 
@@ -152,30 +153,35 @@ export default function InterviewerDashboard() {
                     />
                 </div>
                 <div className="grid gap-6">
-                    {electoralSurveys.map((survey, index) => (
-                        <Card key={index} className="shadow-md hover:shadow-lg transition-shadow">
-                            <CardHeader>
-                                <CardTitle>{survey.name}</CardTitle>
-                                <CardDescription className="flex items-center gap-2 pt-1">
-                                    <MapPin className="h-4 w-4" />
-                                    {survey.location}
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="flex items-center justify-between mb-2 text-sm text-muted-foreground">
-                                    <span>Progresso</span>
-                                    <span>{survey.completed} / {survey.total}</span>
-                                </div>
-                                <Progress value={(survey.completed / survey.total) * 100} />
-                            </CardContent>
-                            <CardFooter className="flex justify-between items-center">
-                                <span className="text-sm text-muted-foreground">Prazo: {survey.deadline}</span>
-                                <Button asChild>
-                                    <Link href={`/interviewer/survey/${survey.id}`}>Iniciar Pesquisa</Link>
-                                </Button>
-                            </CardFooter>
-                        </Card>
-                    ))}
+                    {electoralSurveys.map((survey, index) => {
+                        const completed = parseInt(survey.progress?.split('/')[0] || '0');
+                        const total = parseInt(survey.progress?.split('/')[1] || '100');
+                        const progressValue = total > 0 ? (completed / total) * 100 : 0;
+                        return (
+                            <Card key={survey.id} className="shadow-md hover:shadow-lg transition-shadow">
+                                <CardHeader>
+                                    <CardTitle>{survey.title}</CardTitle>
+                                    <CardDescription className="flex items-center gap-2 pt-1">
+                                        <MapPin className="h-4 w-4" />
+                                        {survey.city || 'Local não definido'}
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="flex items-center justify-between mb-2 text-sm text-muted-foreground">
+                                        <span>Progresso</span>
+                                        <span>{survey.progress || '0/100'}</span>
+                                    </div>
+                                    <Progress value={progressValue} />
+                                </CardContent>
+                                <CardFooter className="flex justify-between items-center">
+                                    <Badge variant="outline">{survey.status}</Badge>
+                                    <Button asChild>
+                                        <Link href={`/interviewer/survey/${survey.id}`}>Iniciar Pesquisa</Link>
+                                    </Button>
+                                </CardFooter>
+                            </Card>
+                        )
+                    })}
                      {electoralSurveys.length === 0 && (
                         <Card className="flex flex-col items-center justify-center p-8 text-center border-dashed">
                              <CardHeader>
