@@ -26,8 +26,8 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
-    allowedDevOrigins: ['*'],
   },
+  allowedDevOrigins: ['*'],
   output: 'standalone',
 };
 
