@@ -28,8 +28,6 @@ export default function InterviewerLoginPage({ searchParams }: { searchParams: {
 
     return redirect('/interviewer/dashboard');
   };
-  
-  const message = searchParams?.message;
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4">
@@ -59,8 +57,8 @@ export default function InterviewerLoginPage({ searchParams }: { searchParams: {
               <Checkbox id="remember" />
               <Label htmlFor="remember" className="text-sm font-normal">Lembrar-me</Label>
             </div>
-            {message && (
-                <p className="text-sm font-medium text-destructive">{message}</p>
+            {searchParams?.message && (
+                <p className="text-sm font-medium text-destructive">{searchParams.message}</p>
             )}
             <Button formAction={signIn} className="w-full">
               Entrar
